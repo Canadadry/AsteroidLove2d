@@ -1,4 +1,5 @@
-require "Plateform"
+require "External-Lib/class"
+require "External-Lib/Plateform"
 
 Item = class()
 

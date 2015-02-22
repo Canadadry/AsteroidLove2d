@@ -1,4 +1,6 @@
-require "class"
+require "External-Lib/class"
+require "SceneGraph/Item"
+
 
 Image=class()
 

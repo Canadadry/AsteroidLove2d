@@ -2,7 +2,7 @@ Plateform ={}
 
 ------- LOVE2D implementation -------
 if love ~= nil then
-  require "Transform"
+  require "SceneGraph/Transform"
 
   Plateform.currentMatrix = Transform{}
 

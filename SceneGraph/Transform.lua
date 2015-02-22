@@ -1,4 +1,4 @@
-require "class"
+require "External-Lib/class"
 
 Transform = class()
 

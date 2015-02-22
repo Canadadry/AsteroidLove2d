@@ -1,8 +1,9 @@
-require "class"
-require "Plateform"
-require "flux"
+require "External-Lib/class"
+require "External-Lib/flux"
+require "SceneGraph/Item"
+require "External-Lib/Plateform"
 
-signal = require "signal"
+signal = require "External-Lib/signal"
 
 
 TouchArea=class()

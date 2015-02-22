@@ -1,12 +1,12 @@
-require "Item"
-require "Rectangle"
-require "Image"
-require "Text"
-require "TouchArea"
-require "Transform"
-require "Column"
-require "Row"
-require "flux"
+require "SceneGraph/Item"
+require "SceneGraph/Rectangle"
+require "SceneGraph/Image"
+require "SceneGraph/Text"
+require "SceneGraph/TouchArea"
+require "SceneGraph/Transform"
+require "SceneGraph/Column"
+require "SceneGraph/Row"
+require "External-Lib/flux"
 
 
 function example1()
