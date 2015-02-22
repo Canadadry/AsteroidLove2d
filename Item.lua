@@ -23,7 +23,7 @@ function Item:init(param)
   self.height   = Property(param.h or param.height or 100)
   self.rotation = Property(param.rotation or param.r or 0)
   self.scale    = Property(param.scale or param.s or 1)
-  self.visible  = true
+  self.visible  = param.visible or true
   self.children = {}
   self.childNameList= {}
   self.currentMatrix = nil
