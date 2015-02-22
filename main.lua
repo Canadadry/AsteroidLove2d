@@ -29,7 +29,8 @@ function love.load()
 
   root.drag.target = root.children[1]
   root.drag.alongXAxis = false
-  root.children[1]:push(Rectangle{type="Rectangle",w=100,h=100,name="test"})
+  root.children[1]:push(Rectangle{w=100,h=100})
+  root.children[1].children[1].height=150
 
 end
 

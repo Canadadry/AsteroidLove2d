@@ -1,3 +1,10 @@
+signal = require "signal"
+
+function signalName(key)
+  return "on".. key:sub(1,1):upper() .. key:sub(2) .. "Changed"
+end
+
+
 function class()
   local cls = {}
   setmetatable(cls,
@@ -18,10 +25,12 @@ function class()
               local property = getmetatable(self).__properties[key]
               if type(value) == "table" and value.__isProperty == true then
                 rawset(getmetatable(self).__properties,key,value)
+                value.callbackName = signalName(key)
+                rawset(self,value.callbackName,signal.new())
               elseif property ~= nil then 
                 if property.value ~= value then 
                   property.value =  value
-                  if property.callBack ~= nil then property.callBack(property.object,value) end
+                  self[property.callbackName].dispatch(value)
                 end
               else 
                 rawset(self,key,value)
@@ -36,6 +45,6 @@ function class()
   return cls
 end
 
-function Property(value, callBack, object)
-  return {value = value, callBack = callBack, object = object, __isProperty = true}
+function Property(value)
+  return {value = value, __isProperty = true, callbackName = ""}
 end

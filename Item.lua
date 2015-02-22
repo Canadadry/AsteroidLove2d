@@ -17,15 +17,21 @@ function Item:init(param)
   param = param or {}
   self.x        = Property(param.x or 0)
   self.y        = Property(param.y or 0)
-  self.width    = Property(param.w or param.width or 100, geometryUpdated)
-  self.height   = Property(param.h or param.height or 100, geometryUpdated)
-  self.rotation = Property(param.rotation or param.r or 0, geometryUpdated)
-  self.sclae    = Property(param.scale or param.s or 1, geometryUpdated)
+  self.width    = Property(param.w or param.width or 100)
+  self.height   = Property(param.h or param.height or 100)
+  self.rotation = Property(param.rotation or param.r or 0)
+  self.scale    = Property(param.scale or param.s or 1)
   self.children = {}
   self.childNameList= {}
   self.currentMatrix = nil
   self.name = param.name
   self.type = "Item"
+  
+  self.onWidthChanged:add(Item.geometryUpdated, self)
+  self.onHeightChanged:add(Item.geometryUpdated, self)
+  self.onRotationChanged:add(Item.geometryUpdated, self)
+  self.onScaleChanged:add(Item.geometryUpdated, self)
+
 
   if param.children ~= nil then
     for key,value in ipairs(param.children) do
@@ -40,6 +46,10 @@ end
 function Item:containPoint(x,y)
   return x>=0 and y>=0 and x <= self.width and y<= self.height
 end 
+
+function Item:geometryUpdated()
+      if self.geometryUpdated ~=nil and self.geometryUpdated ~= Item.geometryUpdated then self:geometryUpdated() end
+end
 
 function Item:create(item)
   self:push(_G[item.type](item))
@@ -81,9 +91,12 @@ function Item:push(child,name)
   if name~=nil then  self.childNameList[name]=child end 
   child.parent = self
   child.name   = name
-  if self.geometryUpdated ~=nil then self:geometryUpdated() end
+  if self.childAdded ~=nil then self:childAdded(child) end
   return child
 end
+
+--function Item:childAdded(child)
+--end
 
 function Item:getChildByName(name)
   return self.childNameList[name]

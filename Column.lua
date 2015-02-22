@@ -3,7 +3,7 @@ require "class"
 Column=class()
 
 function Column:inherit()
-  self.geometryUpdated = self.geometryUpdated or Rectangle.geometryUpdated
+  self.geometryUpdated = self.geometryUpdated or Item.geometryUpdated
 end
 
 function Column:init(param)
@@ -23,8 +23,12 @@ function Column:geometryUpdated()
       child.y = currentPosY
       currentPosY = currentPosY +  child.height + self.spacing
     end
-
-    --print("updated")
   end
 end
+
+function Column:childAdded(child)
+  child.onHeightChanged:add(Column.geometryUpdated, self)
+  self:geometryUpdated()
+end 
+
 
