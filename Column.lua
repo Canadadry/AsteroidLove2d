@@ -24,7 +24,7 @@ function Column:geometryUpdated()
       currentPosY = currentPosY +  child.height + self.spacing
     end
 
-    print("updated")
+    --print("updated")
   end
 end
 

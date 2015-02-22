@@ -62,9 +62,9 @@ function Item:render()
   Plateform.pop()
 end   
 
-function Item:update()
+function Item:update(dt)
   for key,value in ipairs(self.children) do
-    value:update()
+    value:update(dt)
     if value.update ~= Item.update then Item.update(value) end
   end
 end 
