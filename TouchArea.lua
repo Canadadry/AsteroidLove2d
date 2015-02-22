@@ -2,6 +2,9 @@ require "class"
 require "Plateform"
 require "flux"
 
+signal = require "signal"
+
+
 TouchArea=class()
 
 function TouchArea:inherit()
@@ -21,9 +24,12 @@ function TouchArea:init(param)
   self.mouseInside = false
   self.dragTarget = nil
   self.drag = {target = param.dragTarget,
-               initialPosition = {x=nil,y=nil},
-               kinetic = {enable = param.kineticDrag or true,oldPosition={x=0,y=0},timeCounter = 0},
-               alongXAxis = true, alongYAxis =true}
+    initialPosition = {x=nil,y=nil},
+    kinetic = {enable = param.kineticDrag or true,oldPosition={x=0,y=0},timeCounter = 0},
+    alongXAxis = true, alongYAxis =true}
+  self.onPressed = signal.new()
+  self.onReleased = signal.new()
+  self.onMoved = signal.new()
 end 
 
 function TouchArea:update(dt)
@@ -31,7 +37,7 @@ function TouchArea:update(dt)
   mouseX = love.mouse.getX()
   mouseY = love.mouse.getY()
   mouseTouched = love.mouse.isDown("l")
-  
+
 
   if self.drag.target ~= nil and self.pressed == true and self.drag.kinetic.enable then 
     if self.drag.kinetic.timeCounter > 0.2 then 
@@ -58,13 +64,13 @@ function TouchArea:update(dt)
       end
       self.mouseGrabbed = true
       self.pressed = true
-      if self.onPressed ~= nil then self:onPressed() end 
+      self.onPressed:dispatch() 
     end
   elseif self.mouseGrabbed == true and mouseTouched ==  false then 
     -- first clicked 
     self.mouseGrabbed = false
     self.pressed = false
-    if self.onReleased ~= nil then self:onReleased() end 
+    self.onReleased:dispatch()
     self.mouseX = nil
     self.mouseY = nil
 
@@ -78,7 +84,7 @@ function TouchArea:update(dt)
     localPoint = Plateform.worldToLocal(mouseX,mouseY,self.currentMatrix)
     self.mouseX = localPoint.x
     self.mouseY = localPoint.y
-    if self.onMoved ~= nil then self:onMoved() end
+    self.onMoved:dispatch()
     if self.drag.target ~= nil then 
       newOrigin =  Plateform.worldToLocal(mouseX,mouseY,self.drag.target.parent.currentMatrix)
       if self.drag.alongXAxis then self.drag.target.x = newOrigin.x - self.drag.initialPosition.x end
