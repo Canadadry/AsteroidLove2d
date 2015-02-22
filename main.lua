@@ -13,6 +13,7 @@ function love.load()
   TouchArea{
     w = 640, h=480 ,
     children = {
+      Rectangle{c={0,255,0,255}},
       Row{
         spacing = 20,
         children = {
@@ -28,10 +29,11 @@ function love.load()
     }
   }
 
-  root.drag.target = root.children[1]
+  root.drag.target = root.children[2]
   root.drag.alongYAxis = false
-  root.children[1]:push(Rectangle{w=100,h=100})
-  root.children[1].children[1].height=150
+  root.children[2].children[1].height=150
+  root.children[2]:push(Rectangle{w=100,h=100})
+  root.children[1]:anchorFill(root.children[2])
 
 end
 

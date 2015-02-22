@@ -19,16 +19,23 @@ end
 function Row:geometryUpdated()
   if self.finished == true then
     currentPosX = 0
+    maxHeight = 0
     for _,child in ipairs(self.children) do
       child.x = currentPosX
       currentPosX = currentPosX +  child.width + self.spacing
+      if (child.height+child.y) > maxHeight then maxHeight = (child.height+child.y) end
     end
+    self.height = maxHeight
+    self.width = currentPosX
+
   end
 end
 
 function Row:childAdded(child)
+  child.onXChanged:add(Row.geometryUpdated, self)
+  child.onYChanged:add(Row.geometryUpdated, self)
   child.onWidthChanged:add(Row.geometryUpdated, self)
-  self:geometryUpdated()
+  child.onHeightChanged:add(Row.geometryUpdated, self)  self:geometryUpdated()
 end 
 
 
