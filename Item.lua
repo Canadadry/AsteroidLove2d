@@ -76,10 +76,12 @@ function Item:render()
   Plateform.pop()
 end   
 
-function Item:update(dt)
-  for key,value in ipairs(self.children) do
-    value:update(dt)
-    if value.update ~= Item.update then Item.update(value) end
+function Item:update(dt) 
+  if self.visible then
+    for key,value in ipairs(self.children) do
+      value:update(dt)
+      if value.update ~= Item.update then Item.update(value) end
+    end
   end
 end 
 

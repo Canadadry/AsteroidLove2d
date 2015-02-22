@@ -46,7 +46,7 @@ function example1()
 end
 
 function example2()
-item =  Rectangle{ visible = false,x=400,y=100,c={255,0,0,255}}
+local item =  Rectangle{ visible = false,x=400,y=100,c={255,0,0,255}}
   item:push(Rectangle{ x=100,y=100,r=45,c={255,0,0,255}})
   :push(Rectangle{ x=100,y=100,r=45,c={255,0,0,255}})
   :push(Rectangle{ x=100,y=100,r=45,c={255,0,0,255}})
@@ -57,6 +57,31 @@ item =  Rectangle{ visible = false,x=400,y=100,c={255,0,0,255}}
   return item
 end
 
+function example3()
+local item =  Rectangle({x=400,y=150,c={255,0,0,255}})
+     local ta =  item:push(TouchArea())
+
+      ta.onPressed:add(function (self) self.color={255,0,0,255} end,item)
+      ta.onReleased:add(function (self) self.color={128,128,0,255} end,item)
+      ta.drag.target =  item
+return item
+end
+
+
+function example4()
+  
+  local item = Rectangle{color={255,0,0,255}}
+  item.speedX = 120
+  item.speedY = 105
+  item.update = function (self,dt)
+    self.x = self.x + self.speedX * dt
+    self.y = self.y + self.speedX * dt
+    if self.x < 0 or self.x > self.parent.width then self.speedX = -self.speedX end
+    if self.y < 0 or self.y > self.parent.height then self.speedY = -self.speedY end
+  end
+  return item 
+  end
+  
 
 Button = class()
 
@@ -85,6 +110,8 @@ function selectExample(id)
   print ("example ".. id.. " selected")
   exampleList[1].visible = false
   exampleList[2].visible = false
+  exampleList[3].visible = false
+  exampleList[4].visible = false
   exampleList[id].visible = true
 end
 
@@ -97,21 +124,27 @@ function love.load()
         spacing=10,
         children={ 
           ExampleSelectorButton(1),
-          ExampleSelectorButton(2)
+          ExampleSelectorButton(2),
+          ExampleSelectorButton(3),
+          ExampleSelectorButton(4)
         }
       },
       Rectangle{
-        width = 800,
-        height=540,
+        x=5,y=5,
+        width = 790,
+        height=535,
         children={
           example1(),
-          example2()
+          example2(),
+          example3(),
+          example4()
           }
       }
     }
 
 }
 exampleList = root.children[2].children
+selectExample(1)
 
 end
 
