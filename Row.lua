@@ -26,7 +26,7 @@ function Row:geometryUpdated()
       if (child.height+child.y) > maxHeight then maxHeight = (child.height+child.y) end
     end
     self.height = maxHeight
-    self.width = currentPosX
+    self.width = currentPosX - self.spacing
 
   end
 end
