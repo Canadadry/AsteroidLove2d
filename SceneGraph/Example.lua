@@ -9,7 +9,7 @@ require "SceneGraph/Row"
 require "External-Lib/flux"
 
 
-function example1()
+local function example1()
 
   local item = 
   TouchArea{
@@ -45,7 +45,7 @@ function example1()
   return item
 end
 
-function example2()
+local function example2()
   local item =  Rectangle{ visible = false,x=400,y=100,c={255,0,0,255}}
   item:push(Rectangle{ x=100,y=100,r=45,c={255,0,0,255}})
   :push(Rectangle{ x=100,y=100,r=45,c={255,0,0,255}})
@@ -57,7 +57,7 @@ function example2()
   return item
 end
 
-function example3()
+local  function example3()
   local item =  Rectangle({x=400,y=150,c={255,0,0,255}})
   local ta =  item:push(TouchArea())
 
@@ -68,7 +68,7 @@ function example3()
 end
 
 
-function example4()
+local function example4()
 
   local item = Rectangle{color={255,0,0,255}}
   item.speedX = 90
@@ -85,9 +85,9 @@ function example4()
 end
 
 
-Button = class()
+ Button = class()
 
-function Button:init(param)
+ function Button:init(param)
   param = param or {}
   Item.inherit(self)
   Item.init(self,param)
@@ -102,13 +102,13 @@ function Button:init(param)
 
 end
 
-ExampleSelectorButton =class()
+ ExampleSelectorButton =class()
 function ExampleSelectorButton:init(num)
   Button.init(self,{w=100,h=50,bN="Example "..num})
   self.triggered:add(selectExample,num) 
 end
 
-function selectExample(id)
+ function selectExample(id)
   print ("example ".. id.. " selected")
   exampleList[1].visible = false
   exampleList[2].visible = false
@@ -118,7 +118,7 @@ function selectExample(id)
 end
 
 
-function love.load()
+function load()
   root = Column{
     spacing=10,
     children = {
@@ -150,13 +150,13 @@ function love.load()
 
 end
 
-function love.update(dt)
+function update(dt)
   Flux.update(dt)
   root:update(dt)
 
 end
 
-function love.draw()
+function draw()
   Plateform.clear()
   root:render()
 end
