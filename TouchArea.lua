@@ -38,6 +38,7 @@ function TouchArea:update(dt)
   mouseY = love.mouse.getY()
   mouseTouched = love.mouse.isDown("l")
 
+  
 
   if self.drag.target ~= nil and self.pressed == true and self.drag.kinetic.enable then 
     if self.drag.kinetic.timeCounter > 0.2 then 
@@ -49,12 +50,13 @@ function TouchArea:update(dt)
     end
   end
 
+    localPoint = Plateform.worldToLocal(mouseX,mouseY,self.currentMatrix)
+    self.mouseInside = self:containPoint(localPoint.x,localPoint.y)
 
   if self.mouseGrabbed == false and mouseTouched ==  true then 
 
-    localPoint = Plateform.worldToLocal(mouseX,mouseY,self.currentMatrix)
 
-    if self:containPoint(localPoint.x,localPoint.y) then 
+    if self.mouseInside then 
       self.mouseX = localPoint.x
       self.mouseY = localPoint.y
       if self.drag.target ~= nil then 
@@ -81,7 +83,6 @@ function TouchArea:update(dt)
     end
 
   elseif self.mouseGrabbed == true and mouseTouched ==  true then 
-    localPoint = Plateform.worldToLocal(mouseX,mouseY,self.currentMatrix)
     self.mouseX = localPoint.x
     self.mouseY = localPoint.y
     self.onMoved:dispatch()
