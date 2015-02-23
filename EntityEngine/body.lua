@@ -12,10 +12,12 @@ function Body:init(param)
 end
 
 function Body:testCollision(entity)
-    if entity.body == nil then return false end 
+   if entity.body == nil then return false end
+   if entity.isDead or self.entity.isDead then return false end
     local dx = self.x - entity.body.x;
     local dy = self.y - entity.body.y;
     
-    return ((dx * dx) + (dy * dy)) <= (self.radius + otherEntity.body.radius)
+    return ((dx * dx) + (dy * dy)) <= (self.radius + entity.body.radius)
+    
 end
 

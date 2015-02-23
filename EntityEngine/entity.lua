@@ -15,6 +15,7 @@ function Entity:init(param)
   self.onCreated   = signal.new()
   self.onDestroyed = signal.new()
   self.isDead = false
+  self.type = param.tyme or "None"
   
   self.gamepad = param.gamepad
   self.physic  = param.physic
@@ -35,7 +36,7 @@ function Entity:update(dt)
   if self.physic   then self.physic:update(dt) end
   if self.view     then self.view:update(dt) end
   
-  for _,component in pairs(self.components) do component:update(dt) end
+  for _,component in pairs(self.components) do if component.update then component:update(dt) end end
   
 end 
 
