@@ -1,5 +1,5 @@
 require "External-lib/class"
-local signal = require "External-Lib/signal"
+require "External-Lib/signal"
 
 Entity = class()
 
@@ -12,8 +12,8 @@ end
 
 function Entity:init(param)
   param = param or {}
-  self.onCreated   = signal.new()
-  self.onDestroyed = signal.new()
+  self.onCreated   = Signal()
+  self.onDestroyed = Signal()
   self.isDead = false
   self.type = param.tyme or "None"
   

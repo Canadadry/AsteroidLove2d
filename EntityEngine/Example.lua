@@ -42,7 +42,7 @@ function Bullet:init(param)
   Entity.inherit(self)
   Entity.init(self,{
       view = View{sprite=love.graphics.newImage( "Assets/bullet.png" )},
-      body = Body{x= param.x,y=param.y,angle=param.angle},
+      body = Body{x= param.x,y=param.y,angle=param.angle,size=3},
       physic = Physic{drag = 1},
       type = "Bullet"
     })
@@ -58,14 +58,14 @@ function Rock:init(param)
   Entity.inherit(self)
   Entity.init(self,{
       view = View{sprite=love.graphics.newImage( "Assets/rock.png" )},
-      body = Body{x= param.x,y=param.y,angle=param.angle},
+      body = Body{x= param.x,y=param.y,angle=param.angle,size=100},
       physic = Physic{drag = 1},
       type= "Rock"
     })
   self.body.x = math.random(0,param.w)
   self.body.y = math.random(0,param.h)
   self.body.angle = math.random(0,360)
-  self.physic:thrust(100)
+  self.physic:thrust(50)
   self:push(WarpInBound())
   self:push(CanBeHurt())
   self:push(Health(),"health")
@@ -90,27 +90,27 @@ function CanBeHurt:init(param)
   Game.collisionDetected:add(CanBeHurt.handleCollision,self)
 end
 function CanBeHurt:handleCollision(entity_l,entity_r)
-    print(self.entity,entity_l,entity_r)
+--    print(self.entity,entity_l,entity_r)
     if self.entity == entity_l or self.entity == entity_r then 
     print("collision detected")
-    if self.entity.health then self.entity.health.hurt(1) end
+      if self.entity.components.health then print("bibite") self.entity.components.health:hit(1) end
     end
 end 
 
 Game = {
   entities = {},
-  collisionDetected = signal.new(),
+  collisionDetected = Signal(),
   update = function (self,dt) for _,entity in pairs(self.entities) do entity:update(dt) end end,
   draw   = function (self)   for _,entity in pairs(self.entities) do  entity:draw() end end,
   removeDeadEntity = function (self) for _,entity in pairs(self.entities) do  if entity.isDead then self:remove(entity) end end end,
   insert   = function (self,entity) self.entities[entity] = entity end,
   remove   = function (self,entity) self.entities[entity] = nil end,
-  resolveCollision = function (self) for _,entity_l in pairs(self.entities) do 
+  resolveCollision = function (self) 
+    for _,entity_l in pairs(self.entities) do 
       if entity_l.body then
         for _,entity_r in pairs(self.entities) do
-          if entity_r.body then 
+          if entity_l ~= entity_r and entity_r.body then 
             if entity_l.body:testCollision(entity_r) then 
-              print("will dispatch", entity_l,entity_r)
               Game.collisionDetected:dispatch(entity_l,entity_r) 
             end 
           end 
@@ -123,7 +123,7 @@ Game = {
 function load()
   ship = Entity{
     view = View{sprite=love.graphics.newImage( "Assets/ship.png" )},
-    body = Body{x= 400,y=300,angle=45},
+    body = Body{x= 400,y=300,angle=45,size=100},
     physic = Physic{drag = 0.9},
     gamepad = KeyBoardedGamePad(),
     type = "ship"
