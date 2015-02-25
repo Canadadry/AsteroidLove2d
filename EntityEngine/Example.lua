@@ -57,18 +57,35 @@ Rock = class()
 function Rock:init(param)
   Entity.inherit(self)
   Entity.init(self,{
-      view = View{sprite=love.graphics.newImage( "Assets/rock.png" )},
-      body = Body{x= param.x,y=param.y,angle=param.angle,size=32},
+      view = View{sprite=love.graphics.newImage( "Assets/rock.png" ),scale=param.scale},
+      body = Body{x= param.x,y=param.y,angle=param.angle,size=32*(param.scale or 1)},
       physic = Physic{drag = 1},
       type= "Rock"
     })
-  self.body.x = math.random(0,param.w)
-  self.body.y = math.random(0,param.h)
+  self.body.x = param.x or math.random(0,param.w)
+  self.body.y = param.y or math.random(0,param.h)
   self.body.angle = math.random(0,360)
   self.physic:thrust(50)
-  self:push(WarpInBound())
+  self:push(WarpInBound{w=param.w,h=param.h})
   self:push(CanBeHurt{by="Bullet"})
-  self:push(Health(),"health")
+  self:push(Health{life=param.life or 4},"health")
+  self.components.health.onHurted:add(
+    function (self) 
+      if self.isDead then return end
+      self.view.scale = self.view.scale *0.66 
+      self.body.radius = self.body.radius *0.66
+      self.physic.velocityX = - 1.33 * self.physic.velocityX
+      self.physic.velocityY = - 1.33 * self.physic.velocityY
+      
+      Game:insert(Rock{
+          w=800,h=600,
+          self.body.x,y=self.body.y,
+          angle=self.body.angle,
+          scale=self.view.scale,
+          life=self.components.health.life
+          }) 
+    end
+    )
 end
 
 WarpInBound = class()
@@ -92,12 +109,12 @@ function CanBeHurt:init(param)
 end
 function CanBeHurt:handleCollision(entity_l,entity_r)
 --    print(self.entity,entity_l,entity_r)
-    if self.entity == entity_l and ( self.by == nil or  self.by == entity_r.type) then      
-        if self.entity.components.health then self.entity.components.health:hit(1) end
-    end
-    if  self.entity == entity_r and ( self.by == nil or  self.by == entity_l.type) then       
-        if self.entity.components.health then self.entity.components.health:hit(1) end
-    end
+  if self.entity == entity_l and ( self.by == nil or  self.by == entity_r.type) then      
+    if self.entity.components.health then self.entity.components.health:hit(1) end
+  end
+  if  self.entity == entity_r and ( self.by == nil or  self.by == entity_l.type) then       
+    if self.entity.components.health then self.entity.components.health:hit(1) end
+  end
 end 
 
 Game = {
@@ -138,19 +155,22 @@ function load()
   ship:push(Health{life=3,recover=1},"health")
 
   Game:insert(ship)
-  for i=1,math.random(10,15) do
+--  for i=1,math.random(10,15) do
     Game:insert(Rock{w=800,h=600}) 
-  end
+--  end
 end
 
 function update(dt)
   Game:update(dt)
-  Game:resolveCollision()
 end
 
 function draw()
-  Game:draw()
-  Game:removeDeadEntity()
+  if ship.isDead then 
+  else
+    Game:draw()
+    Game:resolveCollision()
+    Game:removeDeadEntity()
+  end
 end
 
 
