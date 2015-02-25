@@ -1,4 +1,4 @@
-require "External-Lib/class"
+require "External-Lib/Class"
 require "External-Lib/Plateform"
 
 View = class()

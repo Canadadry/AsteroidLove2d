@@ -1,5 +1,5 @@
-require "External-lib/class"
-require "External-Lib/signal"
+require "External-lib/Class"
+require "External-Lib/Signal"
 
 Entity = class()
 

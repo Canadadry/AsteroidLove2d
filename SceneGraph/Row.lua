@@ -1,4 +1,4 @@
-require "External-Lib/class"
+require "External-Lib/Class"
 require "SceneGraph/Item"
 
 

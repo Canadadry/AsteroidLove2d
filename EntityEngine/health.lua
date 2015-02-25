@@ -1,5 +1,5 @@
-require "External-Lib/class"
-require "External-Lib/signal"
+require "External-Lib/Class"
+require "External-Lib/Signal"
 
 Health = class()
 

@@ -1,4 +1,4 @@
-require "External-lib/class"
+require "External-lib/Class"
 
 Body = class()
 

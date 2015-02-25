@@ -6,7 +6,7 @@ require "SceneGraph/TouchArea"
 require "SceneGraph/Transform"
 require "SceneGraph/Column"
 require "SceneGraph/Row"
-require "External-Lib/flux"
+require "External-Lib/Flux"
 
 
 local function example1()

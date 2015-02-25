@@ -79,7 +79,7 @@ function Rock:init(param)
       
       Game:insert(Rock{
           w=800,h=600,
-          self.body.x,y=self.body.y,
+          x=self.body.x,y=self.body.y,
           angle=self.body.angle,
           scale=self.view.scale,
           life=self.components.health.life
@@ -155,9 +155,9 @@ function load()
   ship:push(Health{life=3,recover=1},"health")
 
   Game:insert(ship)
---  for i=1,math.random(10,15) do
+  for i=1,math.random(10,15) do
     Game:insert(Rock{w=800,h=600}) 
---  end
+  end
 end
 
 function update(dt)
