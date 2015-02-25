@@ -15,9 +15,9 @@ end
 function Health:hit(damage)
   if self.lastTimeHit > self.recover then
     self.lastTimeHit = 0 
-    self.life = self.life - damage;
-    self.onHurted:dispatch(self.entity)
+    self.life = self.life - damage
     if self.life <= 0 then self.entity.isDead = true end
+    self.onHurted:dispatch(self.entity)
   end
 end
 
