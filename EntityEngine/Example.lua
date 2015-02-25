@@ -48,7 +48,7 @@ function Bullet:init(param)
     })
   self.physic:thrust(300+ (param.power or 0))
   self:push(WarpInBound())
-  self:push(CanBeHurt())
+  self:push(CanBeHurt{by="Rock"})
   self:push(Health(),"health")
   self:push{ delay=0,  update=function (self,dt) self.delay = self.delay + dt if self.delay > 1 then self.entity.isDead = true end end }
 end
@@ -67,7 +67,7 @@ function Rock:init(param)
   self.body.angle = math.random(0,360)
   self.physic:thrust(50)
   self:push(WarpInBound())
-  self:push(CanBeHurt())
+  self:push(CanBeHurt{by="Bullet"})
   self:push(Health(),"health")
 end
 
@@ -87,13 +87,16 @@ end
 
 CanBeHurt = class()
 function CanBeHurt:init(param)
+  self.by = param.by
   Game.collisionDetected:add(CanBeHurt.handleCollision,self)
 end
 function CanBeHurt:handleCollision(entity_l,entity_r)
 --    print(self.entity,entity_l,entity_r)
-    if self.entity == entity_l or self.entity == entity_r then 
-    print("collision detected")
-      if self.entity.components.health then print("bibite") self.entity.components.health:hit(1) end
+    if self.entity == entity_l and ( self.by == nil or  self.by == entity_r.type) then      
+        if self.entity.components.health then self.entity.components.health:hit(1) end
+    end
+    if  self.entity == entity_r and ( self.by == nil or  self.by == entity_l.type) then       
+        if self.entity.components.health then self.entity.components.health:hit(1) end
     end
 end 
 
@@ -126,16 +129,18 @@ function load()
     body = Body{x= 400,y=300,angle=45,size=100},
     physic = Physic{drag = 0.9},
     gamepad = KeyBoardedGamePad(),
-    type = "ship"
+    type = "Ship"
   }
   ship:push(WarpInBound())
   ship:push(Weapon(),"weapon")
   ship.physic:thrust(100)
+  ship:push(CanBeHurt{by="Rock"})
+  ship:push(Health{life=3,recover=3},"health")
 
   Game:insert(ship)
-  --for i=1,math.random(10,15) do
+  for i=1,math.random(10,15) do
     Game:insert(Rock{w=800,h=600}) 
-  --end
+  end
 end
 
 function update(dt)
