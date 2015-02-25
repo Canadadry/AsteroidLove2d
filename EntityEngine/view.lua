@@ -18,7 +18,11 @@ function View:draw()
     Plateform.push()
     Plateform.translate(self.entity.body.x,self.entity.body.y)
     Plateform.rotate(self.entity.body.angle)
-    love.graphics.setColor({255,255,255,255})
+    if self.entity.components.health and self.entity.components.health.invicible then 
+      love.graphics.setColor({255,255,255,128}) 
+    else
+      love.graphics.setColor({255,255,255,255})
+    end
     love.graphics.draw(self.sprite, -self.width/2,-self.height/2)
     Plateform.pop()
   end
