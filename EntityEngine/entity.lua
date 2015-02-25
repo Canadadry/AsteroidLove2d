@@ -1,4 +1,4 @@
-require "External-lib/Class"
+require "External-Lib/Class"
 require "External-Lib/Signal"
 
 Entity = class()

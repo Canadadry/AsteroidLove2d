@@ -1,4 +1,4 @@
-signal = require "External-Lib/signal"
+signal = require "External-Lib/Signal"
 
 function signalName(key)
   return "on".. key:sub(1,1):upper() .. key:sub(2) .. "Changed"
