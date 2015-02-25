@@ -42,7 +42,7 @@ function Bullet:init(param)
   Entity.inherit(self)
   Entity.init(self,{
       view = View{sprite=love.graphics.newImage( "Assets/bullet.png" )},
-      body = Body{x= param.x,y=param.y,angle=param.angle,size=3},
+      body = Body{x= param.x,y=param.y,angle=param.angle,size=8},
       physic = Physic{drag = 1},
       type = "Bullet"
     })
@@ -58,7 +58,7 @@ function Rock:init(param)
   Entity.inherit(self)
   Entity.init(self,{
       view = View{sprite=love.graphics.newImage( "Assets/rock.png" )},
-      body = Body{x= param.x,y=param.y,angle=param.angle,size=100},
+      body = Body{x= param.x,y=param.y,angle=param.angle,size=32},
       physic = Physic{drag = 1},
       type= "Rock"
     })
@@ -126,7 +126,7 @@ Game = {
 function load()
   ship = Entity{
     view = View{sprite=love.graphics.newImage( "Assets/ship.png" )},
-    body = Body{x= 400,y=300,angle=45,size=100},
+    body = Body{x= 400,y=300,angle=45,size=16},
     physic = Physic{drag = 0.9},
     gamepad = KeyBoardedGamePad(),
     type = "Ship"
@@ -135,7 +135,7 @@ function load()
   ship:push(Weapon(),"weapon")
   ship.physic:thrust(100)
   ship:push(CanBeHurt{by="Rock"})
-  ship:push(Health{life=3,recover=3},"health")
+  ship:push(Health{life=3,recover=1},"health")
 
   Game:insert(ship)
   for i=1,math.random(10,15) do
