@@ -8,6 +8,8 @@ function View:init(param)
   self.entity = param.entity 
   self.sprite = param.sprite
   self.width , self.height = self.sprite:getDimensions()
+  self.scale = 1.0
+  self.debugDraw= param.debug or false
 end
 
 function View:update()
@@ -18,11 +20,13 @@ function View:draw()
     Plateform.push()
     Plateform.translate(self.entity.body.x,self.entity.body.y)
     Plateform.rotate(self.entity.body.angle)
+    Plateform.scale(self.scale)
     if self.entity.components.health and self.entity.components.health.invicible then 
       love.graphics.setColor({255,255,255,128}) 
     else
       love.graphics.setColor({255,255,255,255})
     end
+    if self.debugDraw then love.graphics.circle("fill",0,0,self.entity.body.radius) end
     love.graphics.draw(self.sprite, -self.width/2,-self.height/2)
     Plateform.pop()
   end
