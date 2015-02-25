@@ -1,4 +1,5 @@
-require "EntityEngine/Example"
+--require "EntityEngine/Example"
+require "SceneGraph/Example"
 
 function love.load()
   load()

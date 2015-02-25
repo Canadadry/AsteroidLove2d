@@ -26,11 +26,11 @@ function class()
               if type(value) == "table" and value.__isProperty == true then
                 rawset(getmetatable(self).__properties,key,value)
                 value.callbackName = signalName(key)
-                rawset(self,value.callbackName,Signal())
+                rawset(self,value.callbackName,Signal(value.callbackName))
               elseif property ~= nil then 
                 if property.value ~= value then 
                   property.value =  value
-                  self[property.callbackName].dispatch(value)
+                  self[property.callbackName]:dispatch(value)
                 end
               else 
                 rawset(self,key,value)

@@ -92,13 +92,13 @@ end
   Item.inherit(self)
   Item.init(self,param)
   self.type = "Button"
-  self.triggered = signal.new()
+  self.triggered = Signal()
   self:push(Rectangle{w=param.w,h=param.h,c={255,255,255,255}})
   self:push(Rectangle{x=5,y=5,w=param.w-10,h=param.h-10,c={255,255,255,255}})
   self:push(Text{w=param.w,h=param.h,text=param.buttonName or param.bN or "Button"})
   local ta = self:push(TouchArea(param))
   ta.onPressed:add(function(button) button.children[2].color={255,0,0,255}end, self)
-  ta.onReleased:add(function(button) button.children[2].color={255,255,255,255} if ta.mouseInside then button.triggered.dispatch() end end, self)
+  ta.onReleased:add(function(button) button.children[2].color={255,255,255,255} if ta.mouseInside then button.triggered:dispatch() end end, self)
 
 end
 
@@ -109,6 +109,7 @@ function ExampleSelectorButton:init(num)
 end
 
  function selectExample(id)
+   if exampleList == nil then return end
   print ("example ".. id.. " selected")
   exampleList[1].visible = false
   exampleList[2].visible = false
@@ -147,6 +148,7 @@ function load()
   }
   exampleList = root.children[2].children
   selectExample(1)
+  
 
 end
 

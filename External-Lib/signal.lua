@@ -4,14 +4,14 @@ local function newListener(func, scope)
   return setmetatable(  { func = func, scope = scope },listenerMetaTable )
 end
 
-Signal = setmetatable({listeners = {}},
-    {
-      __call = function (c)
-        local instance = setmetatable({},{ __index =  c  })
-        return instance
-      end,
-      __index = {}
-    })
+Signal = setmetatable({},
+  {
+    __call = function (c,name)
+      local instance = setmetatable({listeners = {}, name = name or "Unkonw"},{ __index =  c  })
+      return instance
+    end,
+    __index = {}
+  })
 
 function Signal:add(func, scope)
   if func == nil then error("Function passed to signal:add() must not non-nil.") end
@@ -19,7 +19,8 @@ function Signal:add(func, scope)
 end
 
 function Signal:dispatch(...)
-    for _,listener in pairs(self.listeners) do
+  --print("Signal " .. self.name .. " dispateched")
+  for _,listener in pairs(self.listeners) do
     if listener.scope then
       listener.func(listener.scope, ...)
     else
@@ -30,11 +31,11 @@ end
 
 function Signal:remove(func, scope)
   local listener = newListener(func, scope)
-  
+
   local index = indexOf(listeners, listener)
   for _,index in ipairs(self.listeners) do
-		if  index == value then break end
-	end
+    if  index == value then break end
+  end
   if index ~= nil then
     table.remove(listeners, index)
     self.numListeners = self.numListeners - 1

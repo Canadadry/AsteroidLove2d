@@ -31,12 +31,6 @@ function Item:init(param)
   self.name = param.name
   self.type = "Item"
 
-  self.onWidthChanged:add(Item.geometryUpdated, self)
-  self.onHeightChanged:add(Item.geometryUpdated, self)
-  self.onRotationChanged:add(Item.geometryUpdated, self)
-  self.onScaleChanged:add(Item.geometryUpdated, self)
-
-
   if param.children ~= nil then
     for key,value in ipairs(param.children) do
       self:push(value)
@@ -50,10 +44,6 @@ end
 function Item:containPoint(x,y)
   return x>=0 and y>=0 and x <= self.width and y<= self.height
 end 
-
-function Item:geometryUpdated()
-  if self.geometryUpdated ~=nil and self.geometryUpdated ~= Item.geometryUpdated then self:geometryUpdated() end
-end
 
 function Item:create(item)
   self:push(_G[item.type](item))

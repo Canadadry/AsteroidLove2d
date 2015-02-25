@@ -2,8 +2,7 @@ require "External-Lib/class"
 require "External-Lib/flux"
 require "SceneGraph/Item"
 require "External-Lib/Plateform"
-
-signal = require "External-Lib/signal"
+require "External-Lib/signal"
 
 
 TouchArea=class()
@@ -28,9 +27,9 @@ function TouchArea:init(param)
     initialPosition = {x=nil,y=nil},
     kinetic = {enable = param.kineticDrag or true,oldPosition={x=0,y=0},timeCounter = 0},
     alongXAxis = true, alongYAxis =true}
-  self.onPressed = signal.new()
-  self.onReleased = signal.new()
-  self.onMoved = signal.new()
+  self.onPressed = Signal(self.type .. ".onPressed")
+  self.onReleased = Signal(self.type .. ".onReleased")
+  self.onMoved = Signal(self.type .. ".onMoved")
 end 
 
 function TouchArea:update(dt)
@@ -55,8 +54,6 @@ function TouchArea:update(dt)
     self.mouseInside = self:containPoint(localPoint.x,localPoint.y)
 
   if self.mouseGrabbed == false and mouseTouched ==  true then 
-
-
     if self.mouseInside then 
       self.mouseX = localPoint.x
       self.mouseY = localPoint.y
