@@ -8,7 +8,7 @@ function View:init(param)
   self.entity = param.entity 
   self.sprite = param.sprite
   self.width , self.height = self.sprite:getDimensions()
-  self.scale = 1.0
+  self.scale = param.scale or 1.0
   self.debugDraw= param.debug or false
 end
 
