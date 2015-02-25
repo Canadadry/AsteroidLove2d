@@ -15,7 +15,7 @@ function Entity:init(param)
   self.onCreated   = Signal()
   self.onDestroyed = Signal()
   self.isDead = false
-  self.type = param.tyme or "None"
+  self.type = param.type or "None"
   
   self.gamepad = param.gamepad
   self.physic  = param.physic
