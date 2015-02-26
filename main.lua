@@ -1,4 +1,5 @@
-require "EntityEngine/Example"
+require "Asteroid/Main"
+--require "EntityEngine/Example"
 --require "SceneGraph/Example"
 
 function love.load()
@@ -8,7 +9,6 @@ end
 function love.update(dt)
   update(dt)
 end
-
 
 function love.draw()
   draw()
