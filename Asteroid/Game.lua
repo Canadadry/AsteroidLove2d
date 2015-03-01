@@ -4,6 +4,10 @@ require "EntityEngine/View"
 require "EntityEngine/Physic"
 require "EntityEngine/Health"
 require "Asteroid/StarField"
+require "EntityEngine/Screen"
+
+require "Asteroid/HUD"
+require "Asteroid/Menu"
 
 
 
@@ -143,12 +147,14 @@ Ship = class()
  
 
 
-Game = {score = 0}
+Game = Screen()
 function Game:load()
   self.score = 0
   self.entities = {}
   self.collisionDetected = Signal("Game.collisionDetected")
   self.player = nil
+  
+  self.hud = HUD()
 
   self:insertPlayer(Ship())
   for i=1,math.random(10,15) do
@@ -162,12 +168,17 @@ end
 
 function Game:draw()
   if self.player.isDead then 
+    self:setNextScreen(Menu)
   else
     for _,entity in pairs(self.entities) do  entity:draw() end
     Game:resolveCollision()
 
     for _,entity in pairs(self.entities) do  if entity.isDead then self:remove(entity) end end
   end
+  
+  self.hud.life = self.player.components.health.life
+  self.hud.score  = self.score
+  self.hud:draw()
 end
 
 function Game:resolveCollision() 
