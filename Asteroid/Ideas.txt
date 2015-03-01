@@ -1,0 +1,26 @@
+Adding power-up
+
+Adding shield like the one in Smash Bros
+  - using it decrease it's radius
+  - using it while being hurt decrease greatly it's radius
+  - some power-up recharge the radius
+
+Background
+  - Use starflied to generate parallax
+
+Creating different mode
+  - scoring one : Arcade, every "some definite time" a enemy spawn
+    - it can be a rock 
+    - a enemy ship wich wanna kill you (steering behaviour as AI)
+      - different mode of AI e stupide one wich only follow you and dies hitting rock
+      - another one who tries to avoid Rock Collision
+    - in this mode no health update, only ship
+  - story mode 
+    - in this one the view its not limited to the screen 
+    - there should be area to discover
+    - world is random 
+    - upgrade should be linked to the story
+    - get inspired by "out there"
+    - draw a world map somewhere
+    - adventure open world game in shmup way (new kind of metroidvania)
+    - player should feel lonely

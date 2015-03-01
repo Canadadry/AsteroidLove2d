@@ -66,13 +66,14 @@ function Rock:init(param)
       physic = Physic{drag = 1},
       type= "Rock"
     })
+  local maxLife = 4
   self.body.x = param.x or math.random(0,param.w)
   self.body.y = param.y or math.random(0,param.h)
   self.body.angle = math.random(0,360)
   self.physic:thrust(50)
   self:push(WarpInBound{w=param.w,h=param.h})
   self:push(CanBeHurt{by="Bullet"})
-  self:push(Health{life=param.life or 4},"health")
+  self:push(Health{life=param.life or maxLife},"health")
   self.components.health.onHurted:add(
     function (self) 
       if self.isDead then return end
@@ -80,7 +81,7 @@ function Rock:init(param)
       self.body.radius = self.body.radius *0.66
       self.physic.velocityX = - 1.33 * self.physic.velocityX
       self.physic.velocityY = - 1.33 * self.physic.velocityY
-
+      Game.score = Game.score + 10* (maxLife - self.components.health.life + 1)
       Game:insert(Rock{
           w=800,h=600,
           x=self.body.x,y=self.body.y,
@@ -142,8 +143,9 @@ Ship = class()
  
 
 
-Game = {}
+Game = {score = 0}
 function Game:load()
+  self.score = 0
   self.entities = {}
   self.collisionDetected = Signal("Game.collisionDetected")
   self.player = nil
