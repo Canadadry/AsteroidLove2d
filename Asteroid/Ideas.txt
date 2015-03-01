@@ -1,3 +1,11 @@
+Adding start menu
+  - start arcade
+  - param like button, language, pack of asset 
+
+Adding some Assets
+  - when ship is destroyed add particle effect
+  - show reactor flamme
+
 Adding power-up
 
 Adding shield like the one in Smash Bros
