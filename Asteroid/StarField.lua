@@ -9,7 +9,7 @@ function StarField:init(param)
   self.numberOfParticle = param.number or 300
 
   for i=1,self.numberOfParticle do
-    local newParticle = self:createParticle(1000)
+    local newParticle = self:createParticle(300)
     self.particles[newParticle] = newParticle 
   end
   
@@ -23,7 +23,11 @@ end
 
 function StarField:draw()
     for _,particle in pairs(self.particles) do
-      love.graphics.circle("fill",particle.x,particle.y,1)
+      love.graphics.setColor{255,255,255,(255-particle.minus_alpha)}
+      love.graphics.circle("fill",particle.x,particle.y,particle.radius)
+--      simulate motion blur
+--      love.graphics.setLineWidth(particle.radius)
+--      love.graphics.line(particle.x,particle.y,particle.x_dt,particle.y_dt)
   end
 
 end
@@ -32,8 +36,17 @@ function StarField:updateParticle(particle,dt)
   particle.x = particle.x + particle.speed.x*dt
   particle.y = particle.y + particle.speed.y*dt
   
+  particle.x_dt = particle.x + particle.speed.x*dt
+  particle.y_dt = particle.y + particle.speed.y*dt
+  
   particle.speed.x = particle.speed.x * 1.03
   particle.speed.y = particle.speed.y * 1.03
+
+  
+  particle.minus_alpha = particle.minus_alpha * 0.97
+  
+  
+  
 
   if particle.x < 0 or particle.x > self.w or particle.y < 0 or particle.y > self.h then 
     self.particles[particle] = nil 
@@ -49,7 +62,7 @@ function StarField:createParticle(radius)
   y      = radius * math.sin(angle) + self.h/2
   speed  = math.random(30,80) 
 
-  return {x=x,y=y,angle=angle,speed={x=speed* math.cos(angle),y=speed* math.sin(angle)}}
+  return {x=x,y=y,angle=angle,speed={x=speed* math.cos(angle),y=speed* math.sin(angle)}, radius = math.random(0,2),minus_alpha = 255}
 end
 
 
