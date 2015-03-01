@@ -45,7 +45,7 @@ Bullet = class()
 function Bullet:init(param)
   Entity.inherit(self)
   Entity.init(self,{
-      view = View{sprite=love.graphics.newImage( "Assets/bullet.png" )},
+      view = View{sprite=love.graphics.newImage( "Asteroid/Assets/bullet.png" )},
       body = Body{x= param.x,y=param.y,angle=param.angle,size=8},
       physic = Physic{drag = 1},
       type = "Bullet"
@@ -61,7 +61,7 @@ Rock = class()
 function Rock:init(param)
   Entity.inherit(self)
   Entity.init(self,{
-      view = View{sprite=love.graphics.newImage( "Assets/rock.png" ),scale=param.scale},
+      view = View{sprite=love.graphics.newImage( "Asteroid/Assets/rock.png" ),scale=param.scale},
       body = Body{x= param.x,y=param.y,angle=param.angle,size=32*(param.scale or 1)},
       physic = Physic{drag = 1},
       type= "Rock"
@@ -126,7 +126,7 @@ Ship = class()
  function Ship:init(param)
   Entity.inherit(self)
   Entity.init(self,{
-    view = View{sprite=love.graphics.newImage( "Assets/ship.png" )},
+    view = View{sprite=love.graphics.newImage( "Asteroid/Assets/ship.png" )},
     body = Body{x= param.x or 400, y=param.y or 300,angle=45,size=16},
     physic = Physic{drag = 0.9},
     gamepad = param.gamepad or KeyBoardedGamePad(),
