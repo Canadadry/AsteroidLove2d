@@ -30,6 +30,16 @@ function Item:init(param)
   self.currentMatrix = nil
   self.name = param.name
   self.type = "Item"
+  
+  if param.centerInParent then 
+    self.onComponentCompleted:add(Item.centerInParent,self)
+    
+--    self.parent.onWidthChanged:add(Item.centerInParent,self)
+--    self.parent.onHeightChanged:add(Item.centerInParent,self)
+    self.onWidthChanged:add(Item.centerInParent,self)
+    self.onHeightChanged:add(Item.centerInParent,self)
+  end
+  
 
   if param.children ~= nil then
     for key,value in ipairs(param.children) do
@@ -131,6 +141,11 @@ end
 function Item:centerIn(item)
   self.x = (item.width - self.width)/2
   self.y = (item.height - self.height)/2
+end
+
+
+function Item:centerInParent()
+  self:centerIn(self.parent)
 end
 
 function Item:anchorFill(item)

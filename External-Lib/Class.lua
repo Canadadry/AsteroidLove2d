@@ -37,7 +37,9 @@ function class()
               end
             end
           })
+        rawset(instance,"onComponentCompleted",Signal("onComponentCompleted"))
         if instance.init then instance:init(param) end
+        instance.onComponentCompleted:dispatch()
         return instance
       end,
       __index = {}
