@@ -30,21 +30,25 @@ function Item:init(param)
   self.currentMatrix = nil
   self.name = param.name
   self.type = "Item"
-  
+  self.__isSceneGraphItem = true
+
   if param.centerInParent then 
     self.onComponentCompleted:add(Item.centerInParent,self)
-    
+
 --    self.parent.onWidthChanged:add(Item.centerInParent,self)
 --    self.parent.onHeightChanged:add(Item.centerInParent,self)
     self.onWidthChanged:add(Item.centerInParent,self)
     self.onHeightChanged:add(Item.centerInParent,self)
   end
-  
 
   if param.children ~= nil then
-    for key,value in ipairs(param.children) do
-      self:push(value)
-    end
+    if param.children.__isSceneGraphItem == nil then
+      for key,value in ipairs(param.children) do
+        self:push(value)
+      end
+    else
+      self:push(param.children)
+    end 
   end 
 
   self.parent = param.parent
@@ -145,6 +149,7 @@ end
 
 
 function Item:centerInParent()
+  if self.parent == nil then return end
   self:centerIn(self.parent)
 end
 
