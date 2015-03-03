@@ -1,6 +1,6 @@
---require "Asteroid/Main"
+require "Asteroid/Main"
 --require "EntityEngine/Example"
-require "SceneGraph/Example"
+--require "SceneGraph/Example"
 
 function love.load()
   math.randomseed(os.time())

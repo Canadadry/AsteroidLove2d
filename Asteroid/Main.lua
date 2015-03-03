@@ -1,4 +1,6 @@
 require "Asteroid/Menu"
+require "Asteroid/Game"
+
 require "External-Lib/Flux"
 require "EntityEngine/Screen"
 
