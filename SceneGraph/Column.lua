@@ -26,9 +26,9 @@ function Column:geometryUpdated()
       currentPosY = currentPosY +  child.height + self.spacing
       if (child.width+child.x) > maxWidth then maxWidth = (child.width+child.x) end
     end
-  self.height = currentPosY - self.spacing
-  self.width = maxWidth
-    end
+    self.height = currentPosY - self.spacing
+    self.width = maxWidth
+  end
 
 end
 
