@@ -52,8 +52,8 @@ end
 
 function ScreenManager:draw()
   self.currentScreen:draw()
-  if self.currentScreen.isScreenFinishing then 
-    self.currenScreen =self.currentScreen:getNextScreen()
+  if self.currentScreen.isScreenFinishing  == true then 
+    self.currentScreen = self.currentScreen:getNextScreen()
     self.currentScreen:load()
     end
 end
