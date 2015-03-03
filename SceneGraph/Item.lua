@@ -24,6 +24,7 @@ function Item:init(param)
   self.height   = Property(param.h or param.height or 100)
   self.rotation = Property(param.rotation or param.r or 0)
   self.scale    = Property(param.scale or param.s or 1)
+  self.parent    = Property(param.paren or nil)
   self.visible  = param.visible or true
   self.children = {}
   self.childNameList= {}
@@ -39,6 +40,7 @@ function Item:init(param)
 --    self.parent.onHeightChanged:add(Item.centerInParent,self)
     self.onWidthChanged:add(Item.centerInParent,self)
     self.onHeightChanged:add(Item.centerInParent,self)
+    self.onParentChanged:add(Item.centerInParent,self)
   end
 
   if param.children ~= nil then
@@ -51,7 +53,6 @@ function Item:init(param)
     end 
   end 
 
-  self.parent = param.parent
   if param.parent ~= nil then param.parent:push(self,param.name) end
 end
 
