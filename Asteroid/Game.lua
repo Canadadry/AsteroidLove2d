@@ -7,7 +7,7 @@ require "Asteroid/StarField"
 require "EntityEngine/Screen"
 
 require "Asteroid/HUD"
-require "Asteroid/Menu"
+
 
 
 
