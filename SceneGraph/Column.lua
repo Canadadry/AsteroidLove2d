@@ -19,8 +19,9 @@ end
 
 function Column:geometryUpdated()
   if self.finished == true then
-    currentPosY = 0
-    maxWidth = 0
+    local currentPosY = 0
+    local maxWidth = 0
+    local i = 0
     for _,child in ipairs(self.children) do
       child.y = currentPosY
       currentPosY = currentPosY +  child.height + self.spacing
