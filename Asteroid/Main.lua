@@ -1,4 +1,5 @@
 require "Asteroid/Menu"
+require "Asteroid/Death"
 require "Asteroid/Game"
 
 require "External-Lib/Flux"

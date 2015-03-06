@@ -168,7 +168,7 @@ end
 
 function Game:draw()
   if self.player.isDead then 
-    self:setNextScreen(Menu)
+    self:setNextScreen(Death)
   else
     for _,entity in pairs(self.entities) do  entity:draw() end
     Game:resolveCollision()
