@@ -6,6 +6,7 @@ Health = class()
 function Health:init(param)
     self.entity = param.entity
     self.life = param.life or 1
+    self.maxLife = param.life or 1
     self.recover = param.recover or 0
     self.lastTimeHit = self.recover
     self.invicible = self.lastTimeHit < self.recover
@@ -20,6 +21,12 @@ function Health:hit(damage)
     self.onHurted:dispatch(self.entity)
   end
 end
+
+function Health:heal(life)
+  self.life = self.life + life
+  if self.life > self.maxLife then self.life = self.maxLife end
+end
+
 
 function Health:update(dt)
   self.invicible = self.lastTimeHit < self.recover

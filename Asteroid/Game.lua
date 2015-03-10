@@ -61,6 +61,33 @@ function Bullet:init(param)
   self:push{ delay=0,  update=function (self,dt) self.delay = self.delay + dt if self.delay > 1 then self.entity.isDead = true end end }
 end
 
+Option = class()
+Option.type = {
+    {
+      name = "Health",
+      asset ="Asteroid/Assets/heart.png",
+      action = function () Game.player.components.health:heal(1) end 
+      }
+  }
+function Option:init(param)
+  local id = math.random(1,#Option.type)
+  print(id,Option.type[id])
+  Entity.inherit(self)
+  Entity.init(self,{
+      view = View{sprite=love.graphics.newImage(Option.type[id].asset),axisAligned = true},
+      body = Body{x= param.x,y=param.y,angle=param.angle,size=8},
+      physic = Physic{drag = 1},
+      type = "Option"..self.type[id].name
+    })
+  self.physic:thrust(100)
+  self:push(WarpInBound())
+  self:push(CanBeHurt{by="Ship"})
+  self:push(Health(),"health")
+  self:push{ delay=0,  update=function (self,dt) self.delay = self.delay + dt if self.delay > 30 then self.entity.isDead = true end end }
+  self.components.health.onHurted:add(Option.type[id].action)
+end
+
+
 Rock = class()
 function Rock:init(param)
   Entity.inherit(self)
@@ -93,6 +120,14 @@ function Rock:init(param)
           scale=self.view.scale,
           life=self.components.health.life
         }) 
+      if math.random(1,10) == 1 then 
+        Game:insert(Option{
+          w=800,h=600,
+          x=self.body.x,y=self.body.y,
+          angle=self.body.angle+45,
+          life=self.components.health.life
+        }) 
+      end
     end
   )
 end
@@ -148,7 +183,9 @@ Ship = class()
 
 
 Game = Screen()
-function Game:load()
+function Game:load(param)
+  param = param or {}
+--  param.count = 1
   self.score = 0
   self.entities = {}
   self.collisionDetected = Signal("Game.collisionDetected")
@@ -157,7 +194,7 @@ function Game:load()
   self.hud = HUD()
 
   self:insertPlayer(Ship())
-  for i=1,math.random(10,15) do
+  for i=1,(param.count or math.random(10,15)) do
     self:insert(Rock{w=800,h=600}) 
   end
 end
@@ -170,13 +207,18 @@ function Game:draw()
   if self.player.isDead then 
     self:setNextScreen(Death)
   else
-    for _,entity in pairs(self.entities) do  entity:draw() end
-    Game:resolveCollision()
+--    if #self.entities == 1 then 
+--    self:setNextScreen(Death)
+--    else 
+      for _,entity in pairs(self.entities) do  entity:draw() end
+      Game:resolveCollision()
 
-    for _,entity in pairs(self.entities) do  if entity.isDead then self:remove(entity) end end
+      for _,entity in pairs(self.entities) do  if entity.isDead then self:remove(entity) end end
+--    end 
   end
   
   self.hud.life = self.player.components.health.life
+  self.hud.maxLife = self.player.components.health.maxLife
   self.hud.score  = self.score
   self.hud:draw()
 end
