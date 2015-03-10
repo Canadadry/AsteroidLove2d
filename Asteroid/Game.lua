@@ -8,9 +8,6 @@ require "EntityEngine/Screen"
 
 require "Asteroid/HUD"
 
-
-
-
 KeyBoardedGamePad = class()
 function KeyBoardedGamePad:init(param)
   self.rotationSpeed = param.speed or 100
@@ -34,15 +31,31 @@ Weapon = class()
 function Weapon:init(param)
   self.delay = 0
   self.rate = param.rate or 0.3
+  self.ammo = param.ammo or 0
 end
-function Weapon:update(dt) self.delay= self.delay +  dt end 
+function Weapon:update(dt) self.delay= self.delay + dt end 
+function Weapon:powerUp(ammo) self.ammo= self.ammo + ammo end 
 function Weapon:fire()
   if self.entity.body then 
     if self.delay > self.rate then
       self.delay = 0
-      Game:insert(Bullet({x=self.entity.body.x,y=self.entity.body.y,angle=self.entity.body.angle}))
+--      Game:insert(Bullet({x=self.entity.body.x,y=self.entity.body.y,angle=self.entity.body.angle}))
+        self:createBullet(self.entity.body.x,self.entity.body.y,self.entity.body.angle,0,0)
+        
+        local offset = 10
+        for i = 1,self.ammo do
+          self:createBullet(self.entity.body.x,self.entity.body.y,self.entity.body.angle,0,  offset*i)
+          self:createBullet(self.entity.body.x,self.entity.body.y,self.entity.body.angle,0, -offset*i)
+        end
     end 
   end
+end
+function Weapon:createBullet(x,y,angle,dist,sideOffset)
+  bullet = Bullet{
+      x=x-dist*math.sin(-angle *math.pi /180) + math.sin(-angle *math.pi /180 + math.pi/2) * sideOffset,
+      y=y-dist*math.cos(-angle *math.pi /180) + math.cos(-angle *math.pi /180 + math.pi/2) * sideOffset,
+      angle=angle}
+  Game:insert(bullet)
 end
 
 Bullet = class()
@@ -67,11 +80,15 @@ Option.type = {
       name = "Health",
       asset ="Asteroid/Assets/heart.png",
       action = function () Game.player.components.health:heal(1) end 
-      }
+    },
+    {
+      name = "PowerUp",
+      asset ="Asteroid/Assets/powerup.png",
+      action = function () Game.player.components.weapon:powerUp(1) end 
+    },
   }
 function Option:init(param)
   local id = math.random(1,#Option.type)
-  print(id,Option.type[id])
   Entity.inherit(self)
   Entity.init(self,{
       view = View{sprite=love.graphics.newImage(Option.type[id].asset),axisAligned = true},
@@ -79,7 +96,7 @@ function Option:init(param)
       physic = Physic{drag = 1},
       type = "Option"..self.type[id].name
     })
-  self.physic:thrust(100)
+  self.physic:thrust(50)
   self:push(WarpInBound())
   self:push(CanBeHurt{by="Ship"})
   self:push(Health(),"health")
@@ -177,11 +194,8 @@ Ship = class()
   self.physic:thrust(100)
   self:push(CanBeHurt{by="Rock"})
   self:push(Health{life=3,recover=1},"health")
-
  end
  
-
-
 Game = Screen()
 function Game:load(param)
   param = param or {}
