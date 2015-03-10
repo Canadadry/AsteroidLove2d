@@ -86,26 +86,30 @@ Option.type = {
     {
       name = "Health",
       asset ="Asteroid/Assets/heart.png",
-      action = function () Game.player.components.health:heal(1) end 
+      action = function () Game.player.components.health:heal(1) end,
+      locked = false
     },
     {
       name = "PowerUp",
       asset ="Asteroid/Assets/powerup.png",
-      action = function () Game.player.components.weapon:powerUp(1) end 
+      action = function () Game.player.components.weapon:powerUp(1) end,
+      locked = false
     },
     {
       name = "PowerUp",
       asset ="Asteroid/Assets/piercingBullet.png",
-      action = function () Game.player.components.weapon.piercingBullet = true end 
+      action = function () Game.player.components.weapon.piercingBullet = true Option.type[3].locked=true end ,
+      locked = false
     },
     {
       name = "longRange",
       asset ="Asteroid/Assets/longRange.png",
-      action = function () Game.player.components.weapon.maxRange = 2 end 
+      action = function () Game.player.components.weapon.maxRange = 2 Option.type[4].locked=true end,
+      locked = false
     },
   }
 function Option:init(param)
-  local id = math.random(1,#Option.type)
+  local id = self:getOption()
   Entity.inherit(self)
   Entity.init(self,{
       view = View{sprite=love.graphics.newImage(Option.type[id].asset),axisAligned = true},
@@ -120,6 +124,15 @@ function Option:init(param)
   self:push{ delay=0,  update=function (self,dt) self.delay = self.delay + dt if self.delay > 30 then self.entity.isDead = true end end }
   self.components.health.onHurted:add(Option.type[id].action)
 end
+function Option:getOption()
+  local id = math.random(1,#Option.type)
+  while Option.type[id] == nil or Option.type[id].locked == true do 
+    id = id +1 
+    if id > #Option.type then id = 1 end
+  end
+  return id
+end
+
 
 
 Rock = class()
