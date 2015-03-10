@@ -33,6 +33,7 @@ function Weapon:init(param)
   self.rate = param.rate or 0.3
   self.ammo = param.ammo or 0
   self.piercingBullet = false
+  self.maxRange = 1
 end
 function Weapon:update(dt) self.delay= self.delay + dt end 
 function Weapon:powerUp(ammo) self.ammo= self.ammo + ammo end 
@@ -56,7 +57,8 @@ function Weapon:createBullet(x,y,angle,dist,sideOffset)
       x=x-dist*math.sin(-angle *math.pi /180) + math.sin(-angle *math.pi /180 + math.pi/2) * sideOffset,
       y=y-dist*math.cos(-angle *math.pi /180) + math.cos(-angle *math.pi /180 + math.pi/2) * sideOffset,
       angle=angle,
-      piercingBullet = self.piercingBullet}
+      piercingBullet = self.piercingBullet,
+      range = self.maxRange}
   Game:insert(bullet)
 end
 
@@ -69,13 +71,14 @@ function Bullet:init(param)
       physic = Physic{drag = 1},
       type = "Bullet"
     })
+  self.range = param.range or 1
   self.physic:thrust(300+ (param.power or 0))
   self:push(WarpInBound())
   if param.piercingBullet == false then
     self:push(CanBeHurt{by="Rock"})
   end
   self:push(Health(),"health")
-  self:push{ delay=0,  update=function (self,dt) self.delay = self.delay + dt if self.delay > 1 then self.entity.isDead = true end end }
+  self:push{ delay=0,  update=function (self,dt) self.delay = self.delay + dt if self.delay > self.entity.range then self.entity.isDead = true end end }
 end
 
 Option = class()
@@ -94,6 +97,11 @@ Option.type = {
       name = "PowerUp",
       asset ="Asteroid/Assets/piercingBullet.png",
       action = function () Game.player.components.weapon.piercingBullet = true end 
+    },
+    {
+      name = "longRange",
+      asset ="Asteroid/Assets/longRange.png",
+      action = function () Game.player.components.weapon.maxRange = 2 end 
     },
   }
 function Option:init(param)

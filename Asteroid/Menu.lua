@@ -42,7 +42,7 @@ function Menu:load()
       spacing=10,
       children = { 
         Button{buttonName="Start Asteroid",func=Menu.menuSelected,scope=Menu,w=200,h=100},
-        Button{buttonName="Parameters",func=Menu.menuSelected,scope=Menu,w=200,h=100}
+        --Button{buttonName="Parameters",func=Menu.menuSelected,scope=Menu,w=200,h=100}
       }
     }
   }
