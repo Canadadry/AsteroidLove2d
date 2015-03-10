@@ -9,7 +9,7 @@ function StarField:init(param)
   self.numberOfParticle = param.number or 300
 
   for i=1,self.numberOfParticle do
-    local newParticle = self:createParticle(300)
+    local newParticle = self:createParticleInScreen(self.w,self.h)
     self.particles[newParticle] = newParticle 
   end
   
@@ -28,7 +28,7 @@ function StarField:draw()
 --      simulate motion blur
 --      love.graphics.setLineWidth(particle.radius)
 --      love.graphics.line(particle.x,particle.y,particle.x_dt,particle.y_dt)
-  end
+end
 
 end
 
@@ -45,9 +45,6 @@ function StarField:updateParticle(particle,dt)
   
   particle.minus_alpha = particle.minus_alpha * 0.97
   
-  
-  
-
   if particle.x < 0 or particle.x > self.w or particle.y < 0 or particle.y > self.h then 
     self.particles[particle] = nil 
     local newParticle = self:createParticle()
@@ -55,7 +52,7 @@ function StarField:updateParticle(particle,dt)
   end    
 end
 
-function StarField:createParticle(radius)
+function StarField:createParticleInRadius(radius)
   radius = math.random(0,radius or 300)
   angle  = math.random(0,360)/180*math.pi
   x      = radius * math.cos(angle) + self.w/2
@@ -65,4 +62,12 @@ function StarField:createParticle(radius)
   return {x=x,y=y,angle=angle,speed={x=speed* math.cos(angle),y=speed* math.sin(angle)}, radius = math.random(0,2),minus_alpha = 255}
 end
 
+function StarField:createParticleInScreen(width,heigh)
+  x = math.random(0,width or 800)
+  y = math.random(0,height or 600)
+  angle  = math.atan2(y,x)
+  speed  = math.random(30,80) 
+
+  return {x=x,y=y,angle=angle,speed={x=speed* math.cos(angle),y=speed* math.sin(angle)}, radius = math.random(0,2),minus_alpha = 0}
+end
 
