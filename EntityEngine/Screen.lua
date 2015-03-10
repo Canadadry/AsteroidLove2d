@@ -25,8 +25,9 @@ end
 function Screen:draw()
 end
 
-function Screen:setNextScreen(next_screen)
+function Screen:setNextScreen(next_screen,param)
   self.nextScreen = next_screen
+  self.param = param
   self.isScreenFinishing = true
 end
 
@@ -40,10 +41,10 @@ end
 
 ScreenManager = class()
 
-function ScreenManager:init(currentScreen)
+function ScreenManager:init(currentScreen,param)
   param = param or {}
   self.currentScreen =  currentScreen
-  self.currentScreen:load()
+  self.currentScreen:load(param)
 end
 
 function ScreenManager:update(dt)
@@ -54,7 +55,7 @@ function ScreenManager:draw()
   self.currentScreen:draw()
   if self.currentScreen.isScreenFinishing  == true then 
     self.currentScreen = self.currentScreen:getNextScreen()
-    self.currentScreen:load()
+    self.currentScreen:load(self.param)
     end
 end
 
