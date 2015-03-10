@@ -57,6 +57,9 @@ end
 
 function Menu:update(dt)
   self.mainMenu:update(dt)
+    if love.keyboard.isDown(' ') == true then 
+    self:menuSelected("Start Asteroid")
+  end
 end
 
 function Menu:draw()
