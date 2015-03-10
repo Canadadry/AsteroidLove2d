@@ -7,6 +7,7 @@ require "EntityEngine/Screen"
 
 function load()
   screenManager = ScreenManager(Menu)
+  starField = StarField{w=800,h=600,number=300}
 end
 
 function update(dt)
@@ -15,5 +16,6 @@ function update(dt)
 end
 
 function draw()   
+  starField:draw()
   screenManager:draw()
 end
