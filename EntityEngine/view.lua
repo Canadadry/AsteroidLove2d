@@ -10,6 +10,7 @@ function View:init(param)
   self.width , self.height = self.sprite:getDimensions()
   self.scale = param.scale or 1.0
   self.debugDraw= param.debug or false
+  self.axisAligned = param.axisAligned or false
 end
 
 function View:update()
@@ -19,8 +20,12 @@ function View:draw()
   if self.entity.body then 
     Plateform.push()
     Plateform.translate(self.entity.body.x,self.entity.body.y)
-    Plateform.rotate(self.entity.body.angle)
     Plateform.scale(self.scale)
+    
+    if self.axisAligned  == false then 
+    Plateform.rotate(self.entity.body.angle)
+  end
+    
     if self.entity.components.health and self.entity.components.health.invicible then 
       love.graphics.setColor({255,255,255,128}) 
     else
