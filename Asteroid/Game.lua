@@ -86,13 +86,13 @@ Option.type = {
     {
       name = "Health",
       asset ="Asteroid/Assets/heart.png",
-      action = function () Game.player.components.health:heal(1) end,
+      action = function () Game.player.components.health:heal(1) Option.type[2].locked = Game.player.components.health:isFullLife() end,
       locked = false
     },
     {
       name = "PowerUp",
       asset ="Asteroid/Assets/powerup.png",
-      action = function () Game.player.components.weapon:powerUp(1) end,
+      action = function () Game.player.components.weapon:powerUp(1) Option.type[2].locked=true end,
       locked = false
     },
     {
@@ -224,6 +224,7 @@ Ship = class()
   self.physic:thrust(100)
   self:push(CanBeHurt{by="Rock"})
   self:push(Health{life=3,recover=1},"health")
+  self.components.health.onHurted:add(function () Option.type[2].locked = false end)
  end
  
 Game = Screen()
@@ -234,6 +235,8 @@ function Game:load(param)
   self.entities = {}
   self.collisionDetected = Signal("Game.collisionDetected")
   self.player = nil
+  self.delaySinceLastSpawn = 0
+  self.spawnDelay = 10
   
   self.hud = HUD()
 
@@ -245,6 +248,14 @@ end
 
 function Game:update(dt)
   for _,entity in pairs(self.entities) do entity:update(dt) end
+  self.delaySinceLastSpawn = self.delaySinceLastSpawn + dt
+
+  if self.delaySinceLastSpawn > self.spawnDelay then 
+    self:insert(Rock{w=800,h=600}) 
+    self.delaySinceLastSpawn = 0
+    self.spawnDelay = math.max(self.spawnDelay*0.9,2)
+  end
+  
 end
 
 function Game:draw()

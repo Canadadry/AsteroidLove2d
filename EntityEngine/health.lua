@@ -27,6 +27,11 @@ function Health:heal(life)
   if self.life > self.maxLife then self.life = self.maxLife end
 end
 
+function Health:isFullLife()
+  return self.life == self.maxLife
+end
+
+
 
 function Health:update(dt)
   self.invicible = self.lastTimeHit < self.recover
